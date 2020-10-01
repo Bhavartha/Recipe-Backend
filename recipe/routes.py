@@ -5,7 +5,7 @@ from recipe.models import Name
 
 @app.route('/')
 def home():
-    n = Name(str(randint(1,999)))
+    n = Name(name=str(randint(1,999)))
     db.session.add(n)
     db.session.commit()
     return "Hello"
