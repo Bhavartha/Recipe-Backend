@@ -6,6 +6,7 @@ class User(db.Model):
     name = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(30), nullable=False)
     admin = db.Column(db.Boolean,default=False)
+    recipes = db.relationship('Recipe',backref='author')
 
     def __repr__(self):
         return f"{self.name}"
@@ -15,6 +16,7 @@ class Recipe(db.Model):
     name = db.Column(db.String(50), nullable=False)
     upvotes = db.Column(db.Integer)
     downvotes = db.Column(db.Integer)
+    author_id = db.Column(db.Integer,db.ForeignKey('user.id'))
 
     def __repr__(self):
         return f"{self.name}"
