@@ -1,11 +1,7 @@
-from flask import render_template, url_for, flash, redirect
-from random import randint
+from flask import jsonify
 from recipe import app, db
-from recipe.models import Name
+from recipe.models import *
 
 @app.route('/')
 def home():
-    n = Name(name=str(randint(1,999)))
-    db.session.add(n)
-    db.session.commit()
-    return "Hello"
+    return jsonify({1:"hello"})
