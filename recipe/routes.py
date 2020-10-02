@@ -17,7 +17,7 @@ def get_users():
     op = []
     for user in users:
         op.append({
-            'public_id': user.public_id,
+            'username': user.username,
             'name': user.name,
             'password': user.password,
             'admin': user.admin,
@@ -25,13 +25,13 @@ def get_users():
     return jsonify({'users': op})
 
 
-@app.route('/users/<public_id>', methods=['GET'])
-def get_user(public_id):
-    user = User.query.filter_by(public_id=public_id).first()
+@app.route('/users/<username>', methods=['GET'])
+def get_user(username):
+    user = User.query.filter_by(username=username).first()
     if not user:
         return jsonify({'message': 'User not found'})
     op = {
-            'public_id': user.public_id,
+            'username': user.username,
             'name': user.name,
             'password': user.password,
             'admin': user.admin,
@@ -42,8 +42,11 @@ def get_user(public_id):
 @ app.route('/users', methods = ['POST'])
 def add_user():
     data=request.get_json()
+    user = User.query.filter_by(username=data['username']).first()
+    if user:
+        return jsonify({'message': 'Username taken'})
     hashed_password=generate_password_hash(data['password'], method = 'sha256')
-    user=User(public_id = str(uuid.uuid4()),
+    user=User(username = data['username'],
                 name = data['name'],
                 password = hashed_password)
     db.session.add(user)
@@ -51,9 +54,9 @@ def add_user():
     return jsonify({'message': "User Created"})
 
 
-@ app.route('/users/<public_id>', methods = ['DELETE'])
-def delete_user(public_id):
-    user = User.query.filter_by(public_id=public_id).first()
+@ app.route('/users/<username>', methods = ['DELETE'])
+def delete_user(username):
+    user = User.query.filter_by(username=username).first()
     if not user:
         return jsonify({'message': 'User not found'})
     db.session.delete(user)
