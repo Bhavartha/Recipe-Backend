@@ -1,7 +1,8 @@
 from flask import jsonify, Flask, request, make_response, g
 
-from recipe import app, db
+from recipe import app, db, auth
 from recipe.models import *
+from recipe.utils import *
 
 
 @app.route('/')
@@ -65,35 +66,14 @@ def add_user():
     db.session.commit()
     return jsonify({'message': "User Created"})
 
-
+@auth.login_required
 @ app.route('/users/<username>', methods=['DELETE'])
 def delete_user(username):
+    print(g.user.isAdmin())
     user = User.query.filter_by(username=username).first()
     if not user:
         return jsonify({'message': 'User not found'})
-    db.session.delete(user)
-    db.session.commit()
+    # db.session.delete(user)
+    # db.session.commit()
     return jsonify({'message': "User Deleted"})
 
-
-@app.route('/login')
-def login():
-    auth = request.authorization
-
-    if not auth or not auth.username or not auth.password:
-        return make_response('Couldnt verify', 401, {'WWW-Authenticate': 'Login required'})
-
-    user = User.query.filter_by(username=auth.username).first()
-
-    if not user:
-        return make_response('Couldnt verify', 401, {'WWW-Authenticate': 'Login required'})
-
-    if check_password_hash(user.password, auth.password):
-        expiry = datetime.datetime.now() + datetime.timedelta(minutes=30)
-        token = jwt.encode({
-            'username': user.username,
-            'expiry': expiry
-        }, app.config['SECRET_KEY'])
-        return jsonify({'token': token.decode('utf-8')})
-
-    return make_response('Couldnt verify', 401, {'WWW-Authenticate': 'Login required'})

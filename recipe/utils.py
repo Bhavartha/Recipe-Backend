@@ -14,3 +14,4 @@ def verify_password(username_or_token, password):
             return False
     g.user = user
     return True
+

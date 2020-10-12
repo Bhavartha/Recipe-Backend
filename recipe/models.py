@@ -1,5 +1,5 @@
 from passlib.apps import custom_app_context as pwd_context
-from itsdangerous import TimedJSONWebSignatureSerializer, BadSignature, SignatureExpired
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired
 
 from recipe import db,app
 
@@ -14,6 +14,9 @@ class User(db.Model):
     # Return string representation on User Object 
     def __repr__(self):
         return f"{self.name}"
+
+    def isAdmin(self):
+        return self.admin
 
     # Hashing the password
     def hash_password(self, password):
