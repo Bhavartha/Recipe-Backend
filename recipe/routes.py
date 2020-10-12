@@ -7,7 +7,7 @@ from recipe.utils import *
 
 @app.route('/')
 def home():
-    return jsonify({'msg': "Welcome"})
+    return jsonify({'message': "Welcome"})
 
 # Get all users
 
@@ -31,7 +31,7 @@ def get_users():
 def get_user(username):
     user = User.query.filter_by(username=username).first()
     if not user:
-        return jsonify({'message': 'User not found'})
+        return jsonify({'error': 'User not found'})
     op = {
         'username': user.username,
         'name': user.name,
@@ -66,14 +66,18 @@ def add_user():
     db.session.commit()
     return jsonify({'message': "User Created"})
 
-@auth.login_required
+# Delete an user
+
+
 @ app.route('/users/<username>', methods=['DELETE'])
+@auth.login_required
 def delete_user(username):
-    print(g.user.isAdmin())
+    # Not admin and not the user itself
+    if not (g.user.admin or g.user.username == username):
+        return jsonify({'error': f'Only admin or {username} can delete'})
     user = User.query.filter_by(username=username).first()
     if not user:
-        return jsonify({'message': 'User not found'})
-    # db.session.delete(user)
-    # db.session.commit()
+        return jsonify({'error': 'User not found'})
+    db.session.delete(user)
+    db.session.commit()
     return jsonify({'message': "User Deleted"})
-

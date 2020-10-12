@@ -15,9 +15,6 @@ class User(db.Model):
     def __repr__(self):
         return f"{self.name}"
 
-    def isAdmin(self):
-        return self.admin
-
     # Hashing the password
     def hash_password(self, password):
         self.password = pwd_context.encrypt(password)
