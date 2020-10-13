@@ -3,6 +3,7 @@ from recipe.models import *
 
 from flask import g
 
+
 @auth.verify_password
 def verify_password(username_or_token, password):
     # first try to authenticate by token
@@ -15,6 +16,7 @@ def verify_password(username_or_token, password):
     g.user = user
     return True
 
+
 def ingredients2JSON(ingredients):
     op = []
     for i in ingredients:
@@ -23,6 +25,7 @@ def ingredients2JSON(ingredients):
             'quantity': i.quantity
         })
     return op
+
 
 def steps2JSON(steps):
     op = []
@@ -35,7 +38,6 @@ def steps2JSON(steps):
 
 
 def recipes2JSON(recipes):
-    
     op = []
     for r in recipes:
         op.append({

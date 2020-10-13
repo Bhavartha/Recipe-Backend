@@ -53,18 +53,22 @@ def get_auth_token():
 
 @ app.route('/users', methods=['POST'])
 def add_user():
-    username = request.json.get('username')
-    name = request.json.get('name')
-    password = request.json.get('password')
-    if username is None or password is None or name is None:
-        jsonify({'error': "Please provide valid data"})
-    if User.query.filter_by(username=username).first() is not None:
-        jsonify({'error': "Username not available"})
-    user = User(username=username, name=name)
-    user.hash_password(password)
-    db.session.add(user)
-    db.session.commit()
-    return jsonify({'message': "User Created"})
+    try:
+        username = request.json.get('username')
+        name = request.json.get('name')
+        password = request.json.get('password')    
+        if username is None or password is None or name is None:
+            return jsonify({'error': "Please provide valid data"})
+        if User.query.filter_by(username=username).first() is not None:
+            return jsonify({'error': "Username not available"})
+        user = User(username=username, name=name)
+        user.hash_password(password)
+        db.session.add(user)
+        db.session.commit()
+        return jsonify({'message': "User Created"})
+    except:
+        return jsonify({'error': "Please provide valid data"})
+
 
 # Delete an user
 
@@ -87,7 +91,41 @@ def delete_user(username):
 
 @app.route('/recipes', methods=['GET'])
 def get_recipes():
-    recipes = Recipe.query.order_by(func.random()).limit(10)
+    try:
+        id = request.json.get('id')
+    except:
+        id = None
+    if id:
+        recipes = [Recipe.query.get(id)]
+        if not recipes[0]:
+            return jsonify({'error': "Recipe not found"})
+    else:
+        recipes = Recipe.query.order_by(func.random()).limit(10)
     op = recipes2JSON(recipes)
     return jsonify({'recipes': op})
 
+# Add new recipe
+
+@app.route('/recipes', methods=['POST'])
+def add_recipes():
+    try:
+        id = request.json.get('id')
+    except:
+        id = None
+    if id:
+        recipes = [Recipe.query.get(id)]
+        if not recipes[0]:
+            return jsonify({'error': "Recipe not found"})
+    else:
+        recipes = Recipe.query.order_by(func.random()).limit(10)
+    op = recipes2JSON(recipes)
+    return jsonify({'recipes': op})
+
+
+# Get recipes of a user
+
+@app.route('/recipes/<username>', methods=['GET'])
+def user_recipes(username):
+    user = User.query.filter_by(username=username).first()
+    op = recipes2JSON(user.recipes)
+    return jsonify({'recipes': op})
