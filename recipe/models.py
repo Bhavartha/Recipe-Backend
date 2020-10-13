@@ -44,8 +44,7 @@ class User(db.Model):
 class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
-    upvotes = db.Column(db.Integer, default=False)
-    downvotes = db.Column(db.Integer, default=0)
+    likes = db.Column(db.Integer, default=0)
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     recipe_steps = db.relationship('RecipeSteps', backref='recipe')
     recipe_ingredients = db.relationship('RecipeIngredients', backref='recipe')
