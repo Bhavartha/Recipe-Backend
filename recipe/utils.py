@@ -1,4 +1,4 @@
-from recipe import auth
+from recipe import auth,db
 from recipe.models import *
 
 from flask import g
@@ -49,5 +49,20 @@ def recipes2JSON(recipes):
             'ingredients': ingredients2JSON(r.recipe_ingredients),
             'steps': steps2JSON(r.recipe_steps)
         })
-        print()
     return op
+
+
+def new_recipe(name,author_id,ingredients,steps):
+    recipe = Recipe(name=name, author_id=author_id)
+    db.session.add(recipe)
+    db.session.flush()
+    for i in ingredients:
+        quantity = i.get('quantity')
+        name = i.get('name')
+        ri = RecipeIngredients(name=name,quantity=quantity,recipe_id=recipe.id)
+        db.session.add(ri)
+    for s in steps:
+        step_no = s.get('step_no')
+        info = s.get('info')
+        rs = RecipeSteps(step_no=step_no,info=info,recipe_id=recipe.id)
+        db.session.add(rs)

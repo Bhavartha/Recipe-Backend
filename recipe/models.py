@@ -64,6 +64,6 @@ class RecipeSteps(db.Model):
 
 class RecipeIngredients(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    quantity = db.Column(db.String(20))
+    quantity = db.Column(db.String(10))
     name = db.Column(db.Text, nullable=False)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'))

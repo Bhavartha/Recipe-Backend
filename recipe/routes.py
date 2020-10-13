@@ -56,7 +56,7 @@ def add_user():
     try:
         username = request.json.get('username')
         name = request.json.get('name')
-        password = request.json.get('password')    
+        password = request.json.get('password')
         if username is None or password is None or name is None:
             return jsonify({'error': "Please provide valid data"})
         if User.query.filter_by(username=username).first() is not None:
@@ -106,26 +106,32 @@ def get_recipes():
 
 # Add new recipe
 
+
 @app.route('/recipes', methods=['POST'])
+@auth.login_required
 def add_recipes():
     try:
-        id = request.json.get('id')
+        name = request.json.get('name')
+        username = request.json.get('username')
+        ingredients = request.json.get('ingredients')
+        steps = request.json.get('steps')
+        author_id = User.query.filter_by(username=username).first().id
+        new_recipe(name,author_id,ingredients,steps)
+        db.session.commit()
+        return jsonify({'message': "Added"})
     except:
-        id = None
-    if id:
-        recipes = [Recipe.query.get(id)]
-        if not recipes[0]:
-            return jsonify({'error': "Recipe not found"})
-    else:
-        recipes = Recipe.query.order_by(func.random()).limit(10)
-    op = recipes2JSON(recipes)
-    return jsonify({'recipes': op})
+        db.session.rollback()
+        return jsonify({'error': "Cannot add recipe. Please check if data is entered correctly"})
 
 
 # Get recipes of a user
 
 @app.route('/recipes/<username>', methods=['GET'])
 def user_recipes(username):
-    user = User.query.filter_by(username=username).first()
-    op = recipes2JSON(user.recipes)
-    return jsonify({'recipes': op})
+    try:
+        user = User.query.filter_by(username=username).first()
+        op = recipes2JSON(user.recipes)
+        return jsonify({'recipes': op})
+    except:
+        return jsonify({'error': f"Cannot fetch recipef of user {username}"})
+
