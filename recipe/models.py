@@ -1,3 +1,4 @@
+import datetime
 from passlib.apps import custom_app_context as pwd_context
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired
 
@@ -45,6 +46,7 @@ class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     likes = db.Column(db.Integer, default=0)
+    created_date = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     recipe_steps = db.relationship('RecipeSteps', backref='recipe')
     recipe_ingredients = db.relationship('RecipeIngredients', backref='recipe')

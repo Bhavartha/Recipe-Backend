@@ -1,5 +1,5 @@
 from flask import jsonify, Flask, request, make_response, g
-
+from sqlalchemy import func
 from recipe import app, db, auth
 from recipe.models import *
 from recipe.utils import *
@@ -81,3 +81,13 @@ def delete_user(username):
     db.session.delete(user)
     db.session.commit()
     return jsonify({'message': "User Deleted"})
+
+
+# Get Recipes
+
+@app.route('/recipes', methods=['GET'])
+def get_recipes():
+    recipes = Recipe.query.order_by(func.random()).limit(10)
+    op = recipes2JSON(recipes)
+    return jsonify({'recipes': op})
+
