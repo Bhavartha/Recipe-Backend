@@ -1,4 +1,4 @@
-from recipe import auth,db
+from recipe import auth, db
 from recipe.models import *
 
 from flask import g
@@ -37,6 +37,10 @@ def steps2JSON(steps):
     return op
 
 
+def images2JSON(images):
+    return [i.data for i in images]
+
+
 def recipes2JSON(recipes):
     op = []
     for r in recipes:
@@ -47,22 +51,29 @@ def recipes2JSON(recipes):
             'author': r.author.name,
             'author_username': r.author.username,
             'ingredients': ingredients2JSON(r.recipe_ingredients),
-            'steps': steps2JSON(r.recipe_steps)
+            'steps': steps2JSON(r.recipe_steps),
+            'images': images2JSON(r.recipe_images)
         })
     return op
 
 
-def new_recipe(name,author_id,ingredients,steps):
+def new_recipe(name, author_id, ingredients, steps, images):
     recipe = Recipe(name=name, author_id=author_id)
     db.session.add(recipe)
     db.session.flush()
+    if ingredients is None or steps is None:
+        raise Exception()
     for i in ingredients:
         quantity = i.get('quantity')
         name = i.get('name')
-        ri = RecipeIngredients(name=name,quantity=quantity,recipe_id=recipe.id)
+        ri = RecipeIngredients(
+            name=name, quantity=quantity, recipe_id=recipe.id)
         db.session.add(ri)
     for s in steps:
         step_no = s.get('step_no')
         info = s.get('info')
-        rs = RecipeSteps(step_no=step_no,info=info,recipe_id=recipe.id)
+        rs = RecipeSteps(step_no=step_no, info=info, recipe_id=recipe.id)
         db.session.add(rs)
+    for i in images:
+        ri = RecipeIngredients(data=i, recipe_id=recipe.id)
+        db.session.add(ri)

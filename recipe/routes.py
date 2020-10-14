@@ -148,8 +148,9 @@ def add_recipes():
         username = request.json.get('username')
         ingredients = request.json.get('ingredients')
         steps = request.json.get('steps')
+        images = request.json.get('images')
         author_id = User.query.filter_by(username=username).first().id
-        new_recipe(name, author_id, ingredients, steps)
+        new_recipe(name, author_id, ingredients, steps, images)
         db.session.commit()
         return jsonify({'message': "Added"})
     except:
@@ -166,4 +167,4 @@ def user_recipes(username):
         op = recipes2JSON(user.recipes)
         return jsonify({'recipes': op})
     except:
-        return jsonify({'error': f"Cannot fetch recipef of user {username}"})
+        return jsonify({'error': f"Cannot fetch recipes of user {username}"})
