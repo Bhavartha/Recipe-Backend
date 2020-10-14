@@ -50,6 +50,7 @@ class Recipe(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     recipe_steps = db.relationship('RecipeSteps', backref='recipe')
     recipe_ingredients = db.relationship('RecipeIngredients', backref='recipe')
+    recipe_images = db.relationship('RecipeImages', backref='recipe')
 
     def __repr__(self):
         return f"{self.name}"
@@ -66,4 +67,9 @@ class RecipeIngredients(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     quantity = db.Column(db.String(10))
     name = db.Column(db.Text, nullable=False)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'))
+
+class RecipeImages(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    data = db.Column(db.Text,nullable=False)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'))

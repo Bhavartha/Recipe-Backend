@@ -104,8 +104,41 @@ def get_recipes():
     op = recipes2JSON(recipes)
     return jsonify({'recipes': op})
 
-# Add new recipe
+# Get new recipes
 
+
+@app.route('/recipes/new', methods=['GET'])
+def get_recipes_by_new():
+    page = request.args.get('page', 1, type=int)
+    count = request.args.get('count', 10, type=int)
+    desc = request.args.get('desc', True, type=bool)
+    if desc:
+        sortby = Recipe.created_date.desc()
+    else:
+        sortby = Recipe.created_date.asc()
+    recipes = Recipe.query.order_by(sortby).paginate(page=page, per_page=count)
+    op = recipes2JSON(recipes)
+    return jsonify({'recipes': op})
+
+
+# Get top recipes
+
+
+@app.route('/recipes/top', methods=['GET'])
+def get_recipes_by_top():
+    page = request.args.get('page', 1, type=int)
+    count = request.args.get('count', 10, type=int)
+    desc = request.args.get('desc', True, type=bool)
+    if desc:
+        sortby = Recipe.likes.desc()
+    else:
+        sortby = Recipe.likes.asc()
+    recipes = Recipe.query.order_by(sortby).paginate(page=page, per_page=count)
+    op = recipes2JSON(recipes)
+    return jsonify({'recipes': op})
+
+
+# Add new recipe
 
 @app.route('/recipes', methods=['POST'])
 @auth.login_required
@@ -116,7 +149,7 @@ def add_recipes():
         ingredients = request.json.get('ingredients')
         steps = request.json.get('steps')
         author_id = User.query.filter_by(username=username).first().id
-        new_recipe(name,author_id,ingredients,steps)
+        new_recipe(name, author_id, ingredients, steps)
         db.session.commit()
         return jsonify({'message': "Added"})
     except:
@@ -134,4 +167,3 @@ def user_recipes(username):
         return jsonify({'recipes': op})
     except:
         return jsonify({'error': f"Cannot fetch recipef of user {username}"})
-
