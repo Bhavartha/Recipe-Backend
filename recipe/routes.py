@@ -87,20 +87,24 @@ def delete_user(username):
     return jsonify({'message': "User Deleted"})
 
 
-# Get Recipes
+# Get Random Recipes
 
 @app.route('/recipes', methods=['GET'])
-def get_recipes():
-    try:
-        id = request.json.get('id')
-    except:
-        id = None
-    if id:
-        recipes = [Recipe.query.get(id)]
-        if not recipes[0]:
-            return jsonify({'error': "Recipe not found"})
-    else:
-        recipes = Recipe.query.order_by(func.random()).limit(10)
+@app.route('/recipes/random', methods=['GET'])
+def get_recipes_random():
+    count = request.args.get('count', 10, type=int)
+    recipes = Recipe.query.order_by(func.random()).limit(10)
+    op = recipes2JSON(recipes)
+    return jsonify({'recipes': op})
+
+# Get recipe by id
+
+
+@app.route('/recipes/<id>', methods=['GET'])
+def get_recipe(id):
+    recipes = [Recipe.query.get(id)]
+    if not recipes[0]:
+        return jsonify({'error': "Recipe not found"})
     op = recipes2JSON(recipes)
     return jsonify({'recipes': op})
 
@@ -158,9 +162,27 @@ def add_recipes():
         return jsonify({'error': "Cannot add recipe. Please check if data is entered correctly"})
 
 
+# Delete an recipe
+
+
+@ app.route('/recipes/<id>', methods=['DELETE'])
+@auth.login_required
+def delete_recipe(id):
+    recipe_ref = Recipe.query.get(id)
+    if not recipe_ref:
+        return jsonify({'error': 'Recipe not found'})
+
+    # Not admin and not the user itself
+    if not (g.user.admin or g.user.username == recipe_ref.author.username):
+        return jsonify({'error': f'Only admin or {username} can delete'})
+    db.session.delete(recipe_ref)
+    db.session.commit()
+    return jsonify({'message': "Recipe Deleted"})
+
 # Get recipes of a user
 
-@app.route('/recipes/<username>', methods=['GET'])
+
+@app.route('/recipes/user/<username>', methods=['GET'])
 def user_recipes(username):
     try:
         user = User.query.filter_by(username=username).first()
