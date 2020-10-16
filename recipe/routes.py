@@ -1,4 +1,4 @@
-from flask import jsonify, Flask, request, make_response, g
+from flask import jsonify, request, render_template, g
 from sqlalchemy import func
 from recipe import app, db, auth
 from recipe.models import *
@@ -6,8 +6,9 @@ from recipe.utils import *
 
 
 @app.route('/')
+@app.route('/home')
 def home():
-    return jsonify({'message': "Welcome"})
+    return render_template('index.html')
 
 # Get all users
 
@@ -121,7 +122,7 @@ def get_recipes_by_new():
     else:
         sortby = Recipe.created_date.asc()
     recipes = Recipe.query.order_by(sortby).paginate(page=page, per_page=count)
-    op = recipes2JSON(recipes)
+    op = recipes2JSON(recipes.items)
     return jsonify({'recipes': op})
 
 
@@ -138,7 +139,7 @@ def get_recipes_by_top():
     else:
         sortby = Recipe.likes.asc()
     recipes = Recipe.query.order_by(sortby).paginate(page=page, per_page=count)
-    op = recipes2JSON(recipes)
+    op = recipes2JSON(recipes.items)
     return jsonify({'recipes': op})
 
 
