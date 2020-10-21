@@ -3,12 +3,13 @@ from sqlalchemy import func
 from recipe import app, db, auth
 from recipe.models import *
 from recipe.utils import *
+import recipe.codes
 
 
 @app.route('/')
 @app.route('/home')
 def home():
-    return render_template('index.html')
+    return render_template('index.html',codes=recipe.codes)
 
 # Get all users
 

@@ -1,14 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipe App</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='main.css')}}">    
+    <title>Recipe</title>
 </head>
-
 <body>
-    
+    <div class="container">
+    	<h1>Recipe App</h1>
+    	<ul>
+    		<li><a href="#createUser">Creating a User</a></li>
+    		<li><a href="#deleteUser">Deleting a User</a></li>
+    		<li><a href="#getUser">Getting info about User/s</a></li>
+    		<li><a href="#auth">Authentication</a></li>
+    		<li><a href="#createRecipe">Add a new Recipe</a></li>
+    		<li><a href="#deleteRecipe">Deleting a Recipe</a></li>
+    		<li><a href="#getRecipe">Getting info about Recipe/s</a></li>
+    	</ul>
+    	<div id="createUser">
+    		<h2>Creating a User</h2>
+    		<p>To create a new user send a POST request to /users with appropriate JSON data</p>
+    		<pre><code>{{codes.createUser}}</code></pre>
+    	</div>
+    	<div id="deleteUser">
+    		<h2>Deleting a User</h2>
+    		<p>To delete a user, send a DELETE request to /users/{username}</p>
+    		<p>Only admin or the user can perform this action</p>
+    		<pre><code>{{codes.deleteUser}}</code></pre>
+    	</div>
+    </div>
+    <script src="https://unpkg.com/browse/prismjs@1.22.0/components/"></script>
 </body>
-
 </html>
