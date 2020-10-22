@@ -16,13 +16,16 @@ def home():
 
 @app.route('/users', methods=['GET'])
 def get_users():
-    users = User.query.all()
+    query = request.args.get('query', "", type=str)
+    count = request.args.get('count', 10, type=int)
+    nf = User.name.like(f"%{query}%")
+    uf = User.username.like(f"%{query}%")
+    users = User.query.filter((nf)|(uf)).order_by(func.random()).limit(count)
     op = []
     for user in users:
         op.append({
             'username': user.username,
             'name': user.name,
-            'admin': user.admin,
         })
     return jsonify({'users': op})
 
@@ -92,15 +95,15 @@ def delete_user(username):
 # Get Random Recipes
 
 @app.route('/recipes', methods=['GET'])
-@app.route('/recipes/random', methods=['GET'])
 def get_recipes_random():
     count = request.args.get('count', 10, type=int)
-    recipes = Recipe.query.order_by(func.random()).limit(10)
+    query = request.args.get('query', "", type=str)
+    query = Recipe.name.like(f"%{query}%")
+    recipes = Recipe.query.filter(query).order_by(func.random()).limit(count)
     op = recipes2JSON(recipes)
     return jsonify({'recipes': op})
 
 # Get recipe by id
-
 
 @app.route('/recipes/<id>', methods=['GET'])
 def get_recipe(id):
