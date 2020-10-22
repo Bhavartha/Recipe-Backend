@@ -78,3 +78,46 @@ axios(config)
   console.log(error);
 });
 """
+
+getAuthToken = """
+var axios = require('axios');
+
+var config = {
+  method: 'get',
+  url: 'localhost:5000/auth_token',
+  headers: { 
+    'Authorization': 'Basic PjYscml7sK9hbuYzdCgpPC9zY3JpcHQ+OmJ0Km1hcnRoYQ=='
+  }
+};
+
+axios(config)
+.then(function (response) {
+  console.log(JSON.stringify(response.data));
+})
+.catch(function (error) {
+  console.log(error);
+});
+
+
+
+##### OR #####
+
+
+
+var axios = require('axios');
+
+var config = {
+  method: 'get',
+  url: '{token}@localhost:5000/auth_token',
+  headers: { }
+};
+
+axios(config)
+.then(function (response) {
+  console.log(JSON.stringify(response.data));
+})
+.catch(function (error) {
+  console.log(error);
+});
+
+"""
