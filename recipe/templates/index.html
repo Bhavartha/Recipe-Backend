@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container">
-    	<h1>Recipe App</h1>
+    	<div class="name">Recipe App</div>
     	<ul>
     		<li><a href="#createUser">Creating a User</a></li>
     		<li><a href="#deleteUser">Deleting a User</a></li>
@@ -28,6 +28,17 @@
     		<p>To delete a user, send a DELETE request to /users/{username}</p>
     		<p>Only admin or the user can perform this action</p>
     		<pre><code>{{codes.deleteUser}}</code></pre>
+    	</div>
+    	<div id="getUser">
+    		<h2>Getting User list</h2>
+    		<p>To get a list of users, send a GET request to /users</p>
+    		<p>Use query parameter 'query' to filter users based on name or username</p>
+    		<p>Use query parameter 'count' to specify the number of users returned (max 30)</p>
+    		<pre><code>{{codes.getUserList}}</code></pre>
+    		<div class="spacer"></div>
+    		<h2>Getting a specific user</h2>
+    		<p>Send a GET request to /users/{username}</p>
+    		<pre><code>{{codes.getUser}}</code></pre>
     	</div>
     </div>
 </body>

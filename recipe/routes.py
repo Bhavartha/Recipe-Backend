@@ -11,13 +11,12 @@ import recipe.codes
 def home():
     return render_template('index.html',codes=recipe.codes)
 
-# Get all users
-
-
+# Get users
 @app.route('/users', methods=['GET'])
 def get_users():
     query = request.args.get('query', "", type=str)
     count = request.args.get('count', 10, type=int)
+    count = min(abs(count),30)
     nf = User.name.like(f"%{query}%")
     uf = User.username.like(f"%{query}%")
     users = User.query.filter((nf)|(uf)).order_by(func.random()).limit(count)
@@ -97,6 +96,7 @@ def delete_user(username):
 @app.route('/recipes', methods=['GET'])
 def get_recipes_random():
     count = request.args.get('count', 10, type=int)
+    count = min(abs(count),30)
     query = request.args.get('query', "", type=str)
     query = Recipe.name.like(f"%{query}%")
     recipes = Recipe.query.filter(query).order_by(func.random()).limit(count)

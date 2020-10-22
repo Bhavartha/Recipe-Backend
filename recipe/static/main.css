@@ -12,17 +12,21 @@ html{
 .container{
 	margin: 20px auto;
 	max-width: 800px;
-	display: flex;
-	flex-direction: column;
+	padding: 0 20px;
+}
+
+.spacer{
+	margin: 20px 0;
 }
 
 .container div{
 	margin: 20px 0;
 }
 
-h1{
+.name{
 	font-size: 3rem;
-	align-self: center;
+	display: flex;
+	justify-content: center;
 }
 
 ul{
@@ -57,4 +61,9 @@ pre::before {
 	content: "NodeJs-Axios"; 
 	display: block; 
 	font-weight: bold;
+}
+
+h2{
+	font-weight: 600;
+	margin-bottom: 10px;
 }

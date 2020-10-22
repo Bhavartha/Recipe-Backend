@@ -38,3 +38,43 @@ axios(config)
   console.log(error);
 });
 """
+
+getUserList = """
+var axios = require('axios');
+var data = '';
+
+var config = {
+  method: 'get',
+  url: 'localhost:5000/users?query=a&count=10',
+  headers: { },
+  data : data
+};
+
+axios(config)
+.then(function (response) {
+  console.log(JSON.stringify(response.data));
+})
+.catch(function (error) {
+  console.log(error);
+});
+"""
+
+getUser = """
+var axios = require('axios');
+var data = '';
+
+var config = {
+  method: 'get',
+  url: 'localhost:5000/users/uname',
+  headers: { },
+  data : data
+};
+
+axios(config)
+.then(function (response) {
+  console.log(JSON.stringify(response.data));
+})
+.catch(function (error) {
+  console.log(error);
+});
+"""
