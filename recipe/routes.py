@@ -167,7 +167,7 @@ def add_recipes():
         return jsonify({'error': "Cannot add recipe. Please check if data is entered correctly"})
 
 
-# Delete an recipe
+# Delete an Recipe
 
 
 @ app.route('/recipes/<id>', methods=['DELETE'])

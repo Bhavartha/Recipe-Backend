@@ -169,3 +169,23 @@ axios(config)
   console.log(error);
 });
 """
+
+deleteRecipe = """
+var axios = require('axios');
+
+var config = {
+  method: 'delete',
+  url: 'localhost:5000/recipes/1',
+  headers: { 
+    'Authorization': 'Basic eno6enp6enp6eno='
+  }
+};
+
+axios(config)
+.then(function (response) {
+  console.log(JSON.stringify(response.data));
+})
+.catch(function (error) {
+  console.log(error);
+});
+"""

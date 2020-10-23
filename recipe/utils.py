@@ -45,6 +45,7 @@ def recipes2JSON(recipes):
     op = []
     for r in recipes:
         op.append({
+            'id': r.id,
             'name': r.name,
             'likes': r.likes,
             'created_date': r.created_date,
@@ -69,14 +70,11 @@ def new_recipe(name, author_id, ingredients, steps, images):
         ri = RecipeIngredients(
             name=name, quantity=quantity, recipe_id=recipe.id)
         db.session.add(ri)
-    print("ING")
     for s in steps:
         step_no = s.get('step_no')
         info = s.get('info')
         rs = RecipeSteps(step_no=step_no, info=info, recipe_id=recipe.id)
         db.session.add(rs)
-    print("STP")
     for i in images:
         ri = RecipeImages(img_data=i, recipe_id=recipe.id)
         db.session.add(ri)
-    print("IMG")
