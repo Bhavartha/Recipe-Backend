@@ -154,15 +154,15 @@ def get_recipes_by_top():
 def add_recipes():
     try:
         name = request.json.get('name')
-        username = request.json.get('username')
         ingredients = request.json.get('ingredients')
         steps = request.json.get('steps')
         images = request.json.get('images')
-        author_id = User.query.filter_by(username=username).first().id
+        author_id = g.user.id
         new_recipe(name, author_id, ingredients, steps, images)
         db.session.commit()
         return jsonify({'message': "Added"})
-    except:
+    except Exception as e:
+        print(e)
         db.session.rollback()
         return jsonify({'error': "Cannot add recipe. Please check if data is entered correctly"})
 

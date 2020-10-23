@@ -38,7 +38,7 @@ def steps2JSON(steps):
 
 
 def images2JSON(images):
-    return [i.data for i in images]
+    return [i.img_data for i in images]
 
 
 def recipes2JSON(recipes):
@@ -69,11 +69,14 @@ def new_recipe(name, author_id, ingredients, steps, images):
         ri = RecipeIngredients(
             name=name, quantity=quantity, recipe_id=recipe.id)
         db.session.add(ri)
+    print("ING")
     for s in steps:
         step_no = s.get('step_no')
         info = s.get('info')
         rs = RecipeSteps(step_no=step_no, info=info, recipe_id=recipe.id)
         db.session.add(rs)
+    print("STP")
     for i in images:
-        ri = RecipeIngredients(data=i, recipe_id=recipe.id)
+        ri = RecipeImages(img_data=i, recipe_id=recipe.id)
         db.session.add(ri)
+    print("IMG")

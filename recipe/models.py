@@ -71,5 +71,5 @@ class RecipeIngredients(db.Model):
 
 class RecipeImages(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    data = db.Column(db.Text,nullable=False)
+    img_data = db.Column(db.Text,nullable=False)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'))
