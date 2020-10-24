@@ -105,7 +105,7 @@ def get_recipes_random():
 
 # Get recipe by id
 
-@app.route('/recipes/<id>', methods=['GET'])
+@app.route('/recipes/<int:id>', methods=['GET'])
 def get_recipe(id):
     recipes = [Recipe.query.get(id)]
     if not recipes[0]:

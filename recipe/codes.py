@@ -189,3 +189,43 @@ axios(config)
   console.log(error);
 });
 """
+
+getRecipeList = """
+var axios = require('axios');
+var data = '';
+
+var config = {
+  method: 'get',
+  url: 'localhost:5000/recipes',
+  headers: { },
+  data : data
+};
+
+axios(config)
+.then(function (response) {
+  console.log(JSON.stringify(response.data));
+})
+.catch(function (error) {
+  console.log(error);
+});
+"""
+
+getRecipe = """
+var axios = require('axios');
+var data = '';
+
+var config = {
+  method: 'get',
+  url: 'localhost:5000/recipes/1',
+  headers: { },
+  data : data
+};
+
+axios(config)
+.then(function (response) {
+  console.log(JSON.stringify(response.data));
+})
+.catch(function (error) {
+  console.log(error);
+});
+"""

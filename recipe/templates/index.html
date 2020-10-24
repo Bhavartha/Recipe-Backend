@@ -58,6 +58,19 @@
     		<p>Only admin or the author of the recipe can perform this action</p>
     		<pre><code>{{codes.deleteRecipe}}</code></pre>
     	</div>
+    	<div id="getRecipe">
+    		<h2>Getting a list of Recipes</h2>
+    		<p>To get a list of random recipes, send a GET request to /recipes</p>
+    		<p>To get a list of top recipes, send a GET request to /recipes/top</p>
+    		<p>To get a list of new recipes, send a GET request to /recipes/new</p>
+    		<p>Use query parameter 'query' to filter recipes based on name</p>
+    		<p>Use query parameter 'count' to specify the number of users returned (max 30)</p>
+    		<pre><code>{{codes.getRecipeList}}</code></pre>
+    		<div class="spacer"></div>
+    		<h2>Getting a specific recipe</h2>
+    		<p>To get a specific recipe send GET request to /recipes/{recipe_id}</p>
+    		<pre><code>{{codes.getRecipe}}</code></pre>
+    	</div>
     </div>
 </body>
 </html>
